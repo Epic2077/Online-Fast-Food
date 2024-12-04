@@ -6,7 +6,7 @@ import Header from "./Components/Header";
 
 function App() {
   return (
-    <div className="min-h-[100vh] bg-slate-800">
+    <div className="min-h-[100vh] bg-slate-100">
       <Header />
       <BodyContainer />
     </div>
