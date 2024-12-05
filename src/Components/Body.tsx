@@ -24,7 +24,7 @@ export default function BodyContainer() {
 
   return (
     <section className="mt-5">
-      <h2 className="text-center text-[30px]  text-white ">MENU</h2>;
+      <h2 className="text-center text-[30px]  text-black ">MENU</h2>;
       <div
         className="flex flex-wrap justify-center gap-6 w-full"
         id="cardsContainer"
