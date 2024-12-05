@@ -15,6 +15,10 @@ const FoodCard: React.FC<FoodCardProps> = ({ product }) => {
       />
       <h3 className="text-[20px] font-semibold mt-4">{product.name}</h3>
       <p className="text-gray-400 text-[16px] mt-2">{product.Description}</p>
+      <div className="flex">
+        <p>{product.price}</p>
+        <div></div>
+      </div>
     </div>
   );
 };
