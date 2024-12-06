@@ -9,6 +9,24 @@ interface FoodCardProps {
 const FoodCard: React.FC<FoodCardProps> = ({ product }) => {
   const [count, setCount] = useState<number>(0);
 
+  const incrimentCount = () => {
+    setCount((prev) => {
+      const newCount = prev + 1;
+      updateCart(product, newCount);
+      return newCount;
+    });
+  };
+
+  const decrementCount = () => {
+    if (count > 0) {
+      setCount((prev) => {
+        const newCount = prev - 1;
+        updateCart(product, newCount);
+        return newCount;
+      });
+    }
+  };
+
   const updateCart = (product: Product, quantity: number) => {
     const index = cartArray.findIndex(
       (item) => item.product.name === product.name
@@ -46,24 +64,14 @@ const FoodCard: React.FC<FoodCardProps> = ({ product }) => {
         <div className=" flex justify-between mr-5  border-black border-2 w-[110px] items-center rounded-[10px]">
           <div
             className="ml-[-25px] p-[10px] w-[40px] flex justify-center items-center bg-gray-300 rounded-[10px] "
-            onClick={() => {
-              if (count > 0) {
-                setCount(count - 1);
-                updateCart(product, count);
-              } else {
-                return;
-              }
-            }}
+            onClick={decrementCount}
           >
             -
           </div>
           <p>{count}</p>
           <div
             className="text-white bg-orange-500 p-[10px] w-[40px] flex justify-center items-center mr-[-25px] rounded-[10px]"
-            onClick={() => {
-              setCount(count + 1);
-              updateCart(product, count);
-            }}
+            onClick={incrimentCount}
           >
             +
           </div>
