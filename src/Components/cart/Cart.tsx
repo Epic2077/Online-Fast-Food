@@ -1,25 +1,44 @@
 import { useEffect, useState } from "react";
-import { cartArray } from "../cards/FoodCard";
+import { Product } from "../../Api/products";
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 export default function CartContainer() {
-  const [carts, setCarts] = useState(cartArray);
+  const [carts, setCarts] = useState<CartItem[]>([]);
 
+  // Load cart from localStorage on component mount
   useEffect(() => {
-    setCarts([...cartArray]);
-  }, [cartArray]);
+    const syncCart = () => {
+      const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCarts(storedCart);
+    };
+
+    window.addEventListener("storage", syncCart);
+    return () => {
+      window.removeEventListener("storage", syncCart);
+    };
+  }, []);
 
   const updateCartQuantity = (productName: string, change: number) => {
-    const index = cartArray.findIndex(
-      (item) => item.product.name === productName
-    );
-    if (index !== -1) {
-      cartArray[index].quantity += change;
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-      if (cartArray[index].quantity <= 0) {
-        cartArray.splice(index, 1);
+    const index = cart.findIndex(
+      (item: { product: Product }) => item.product.name === productName
+    );
+
+    if (index !== -1) {
+      cart[index].quantity += change;
+
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1); // Remove the item if quantity becomes 0
       }
-      setCarts([...cartArray]);
     }
+
+    localStorage.setItem("cart", JSON.stringify(cart)); // Persist changes
+    setCarts(cart); // Update state
   };
 
   return (

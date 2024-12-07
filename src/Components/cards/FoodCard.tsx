@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Product } from "../../Api/products";
 
 export const cartArray: { product: Product; quantity: number }[] = [];
@@ -8,6 +8,39 @@ interface FoodCardProps {
 
 const FoodCard: React.FC<FoodCardProps> = ({ product }) => {
   const [count, setCount] = useState<number>(0);
+
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existingItem = storedCart.find(
+      (item: { product: Product }) => item.product.name === product.name
+    );
+    if (existingItem) {
+      setCount(existingItem.quantity);
+    }
+  }, [product]);
+
+  const updateCart = (product: product, quantity: number) => {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    const index = cart.findIndex(
+      (item: { product: Product }) => item.product.name === product.name
+    );
+
+    if (quantity > 0) {
+      if (index === -1) {
+        cart.push({ product, quantity });
+      } else {
+        cart[index].quantity = quantity;
+      }
+    } else {
+      if (index !== -1) {
+        cart.splice(index, 1);
+      }
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    console.log("Update Cart:", cart);
+  };
 
   const incrimentCount = () => {
     setCount((prev) => {
@@ -27,27 +60,6 @@ const FoodCard: React.FC<FoodCardProps> = ({ product }) => {
     }
   };
 
-  const updateCart = (product: Product, quantity: number) => {
-    const index = cartArray.findIndex(
-      (item) => item.product.name === product.name
-    );
-
-    if (quantity > 0) {
-      if (index === -1) {
-        cartArray.push({ product, quantity });
-        console.log("Push ", cartArray);
-      } else {
-        cartArray[index].quantity = quantity;
-        console.log("quantity Change ", cartArray);
-      }
-    } else {
-      if (index !== -1) {
-        cartArray.splice(index, 1);
-        console.log("cart Remove ", cartArray);
-      }
-    }
-    console.log("Updated Cart:", cartArray);
-  };
   return (
     <div className="w-[26%] h-[400px] shadow-[0px_4px_40px_-16px_rgba(0,_0,_0,_0.8)] rounded-[10px] p-6">
       <img
