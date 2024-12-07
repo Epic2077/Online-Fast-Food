@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchProduction, Product } from "../Api/products";
 import FoodCard from "./cards/FoodCard";
+import CartContainer from "./cart/Cart";
 
 export default function BodyContainer() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,6 +33,9 @@ export default function BodyContainer() {
         {products.map((product) => (
           <FoodCard key={product.name} product={product} />
         ))}
+      </div>
+      <div className="py-[32px] px-[42px]">
+        <CartContainer />
       </div>
     </section>
   );
